@@ -1,0 +1,27 @@
+# adding a DB directly into a Dockerfile is not best practice - you want separation between the app and DB to make is easier to scale, maintain and debug. my preferred way to add a DB Would be via a docker-compose file - two separate images spun up at the same time, with the app service dependent on the mongo service
+
+version: '3.9'
+services:
+  app:
+    # build the Docker image from the Dockerfile in the current directory
+    build: .
+    ports:
+      - "3000:3000"
+    # commonly used env vars for app to interact with DB
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=$password_var
+    depends_on:
+      - db
+
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: $root_pw
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
