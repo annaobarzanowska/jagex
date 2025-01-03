@@ -1,1 +1,1 @@
-# Please look into appropriate sections
+# Please look in appropriate sections
